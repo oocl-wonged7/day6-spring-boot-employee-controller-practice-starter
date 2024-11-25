@@ -1,8 +1,5 @@
 package com.oocl.springbootemployee.model;
 
-import java.math.BigDecimal;
-import java.util.Objects;
-
 public class Employee {
 
     private Integer id;
@@ -23,40 +20,40 @@ public class Employee {
         this.salary = salary;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public Integer getAge() {
-        return age;
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    public Double getSalary() {
-        return salary;
-    }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getAge() {
+        return age;
     }
 
     public void setAge(Integer age) {
         this.age = age;
     }
 
+    public Gender getGender() {
+        return gender;
+    }
+
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    public Double getSalary() {
+        return salary;
     }
 
     public void setSalary(Double salary) {

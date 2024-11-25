@@ -55,4 +55,11 @@ public class EmployeeRepository {
         employees.removeIf(employee -> employee.getId().equals(id));
         return id;
     }
+
+    public List<Employee> getByPageAndSize(Integer page, Integer size) {
+        return employees.stream()
+                .skip((page - 1) * size)
+                .limit(size)
+                .toList();
+    }
 }

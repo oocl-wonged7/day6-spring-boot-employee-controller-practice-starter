@@ -42,6 +42,15 @@ public class EmployeeControllerTest {
         employeeRepository.addEmployee(new Employee(1, "Employee1", 10, Gender.MALE, 5000.0));
         employeeRepository.addEmployee(new Employee(2, "Employee2", 20, Gender.FEMALE, 15000.0));
         employeeRepository.addEmployee(new Employee(3, "Employee3", 30, Gender.MALE, 35000.0));
+        employeeRepository.addEmployee(new Employee(4, "Employee4", 10, Gender.MALE, 5000.0));
+        employeeRepository.addEmployee(new Employee(5, "Employee5", 20, Gender.FEMALE, 15000.0));
+        employeeRepository.addEmployee(new Employee(6, "Employee6", 30, Gender.MALE, 35000.0));
+        employeeRepository.addEmployee(new Employee(7, "Employee7", 10, Gender.MALE, 5000.0));
+        employeeRepository.addEmployee(new Employee(8, "Employee8", 20, Gender.FEMALE, 15000.0));
+        employeeRepository.addEmployee(new Employee(9, "Employee9", 30, Gender.MALE, 35000.0));
+        employeeRepository.addEmployee(new Employee(10, "Employee10", 10, Gender.MALE, 5000.0));
+        employeeRepository.addEmployee(new Employee(11, "Employee11", 20, Gender.FEMALE, 15000.0));
+        employeeRepository.addEmployee(new Employee(12, "Employee12", 30, Gender.MALE, 35000.0));
     }
 
     @Test
@@ -78,13 +87,13 @@ public class EmployeeControllerTest {
         List<Employee> expectedEmployees = employeeRepository.getByGender(Gender.MALE);
 
         //When
-        String employeesResponseString = client.perform(MockMvcRequestBuilders.get("/employees")
+        String employeesJson = client.perform(MockMvcRequestBuilders.get("/employees")
                         .param("gender", Gender.MALE.name()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
         //Then
-        assertThat(employeesJacksonTester.parse(employeesResponseString)).usingRecursiveComparison().isEqualTo(expectedEmployees);
+        assertThat(employeesJacksonTester.parse(employeesJson)).usingRecursiveComparison().isEqualTo(expectedEmployees);
     }
 
     @Test
@@ -92,7 +101,7 @@ public class EmployeeControllerTest {
         //Given
         String employee = """
                 {
-                    "name": "E4",
+                    "name": "Employee13",
                     "age": 12,
                     "gender": "MALE",
                     "salary": 10000.0
@@ -100,7 +109,7 @@ public class EmployeeControllerTest {
                 """;
 
         // When
-        final Employee expected_employee = new Employee(4, "E4", 12, Gender.MALE, 10000.0);
+        final Employee expected_employee = new Employee(13, "Employee13", 12, Gender.MALE, 10000.0);
         String employeeJson = client.perform((MockMvcRequestBuilders.post("/employees"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(employee))
@@ -146,4 +155,19 @@ public class EmployeeControllerTest {
         assertThat(id).isEqualTo("1");
     }
 
+    @Test
+    void should_return_employess_when_get_given_page_and_size() throws Exception {
+        //Given
+        List<Employee> expectedEmployees = employeeRepository.getByPageAndSize(1, 5);
+
+        //When
+        String employeesResponseString = client.perform(MockMvcRequestBuilders.get("/employees")
+                        .param("page", "1")
+                        .param("size", "5"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        //Then
+        assertThat(employeesJacksonTester.parse(employeesResponseString)).usingRecursiveComparison().isEqualTo(expectedEmployees);
+    }
 }
