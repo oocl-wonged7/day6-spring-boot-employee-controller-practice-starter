@@ -50,4 +50,9 @@ public class EmployeeRepository {
         updatedEmployee.setSalary(salary);
         return updatedEmployee;
     }
+
+    public Integer deleteEmployee(Integer id) {
+        employees.removeIf(employee -> employee.getId().equals(id));
+        return id;
+    }
 }

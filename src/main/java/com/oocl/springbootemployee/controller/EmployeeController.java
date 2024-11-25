@@ -42,4 +42,10 @@ public class EmployeeController {
     public Employee updateEmployee(@PathVariable Integer id, @RequestBody Employee employee) {
         return employeeRepository.updateEmployee(id, employee.getAge(), employee.getSalary());
     }
+
+    @DeleteMapping(path = "/{id}")
+    @ResponseStatus(code = org.springframework.http.HttpStatus.NO_CONTENT)
+    public Integer deleteEmployee(@PathVariable Integer id) {
+        return employeeRepository.deleteEmployee(id);
+    }
 }

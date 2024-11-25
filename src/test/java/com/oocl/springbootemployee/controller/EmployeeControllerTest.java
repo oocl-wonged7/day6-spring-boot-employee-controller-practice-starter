@@ -122,7 +122,7 @@ public class EmployeeControllerTest {
                 """;
 
         // When
-        final Employee expectedEmployee = new Employee(1, "E1", 12, Gender.MALE, 10000.0);
+        final Employee expectedEmployee = new Employee(1, "Employee1", 12, Gender.MALE, 10000.0);
         String employeeJson = client.perform((MockMvcRequestBuilders.put("/employees/1"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(employee))
@@ -132,4 +132,18 @@ public class EmployeeControllerTest {
         // Then
         assertThat(employeeJacksonTester.parse(employeeJson)).usingRecursiveComparison().isEqualTo(expectedEmployee);
     }
+
+    @Test
+    void should_delete_employee_when_delete_given_employee_id() throws Exception {
+        //Given
+
+        // When
+        String id = client.perform(MockMvcRequestBuilders.delete("/employees/1"))
+                .andExpect(MockMvcResultMatchers.status().isNoContent())
+                .andReturn().getResponse().getContentAsString();
+
+        // Then
+        assertThat(id).isEqualTo("1");
+    }
+
 }
