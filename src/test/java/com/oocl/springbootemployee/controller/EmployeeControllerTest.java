@@ -15,12 +15,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -42,14 +39,13 @@ public class EmployeeControllerTest {
     @BeforeEach
     void setUp() {
         employeeRepository.getAll().clear();
-        employeeRepository.addEmployee(new Employee(1, "E1", 10, Gender.MALE, 5000.0));
-        employeeRepository.addEmployee(new Employee(2, "E2", 20, Gender.FEMALE, 15000.0));
-        employeeRepository.addEmployee(new Employee(3, "E3", 30, Gender.MALE, 35000.0));
+        employeeRepository.addEmployee(new Employee(1, "Employee1", 10, Gender.MALE, 5000.0));
+        employeeRepository.addEmployee(new Employee(2, "Employee2", 20, Gender.FEMALE, 15000.0));
+        employeeRepository.addEmployee(new Employee(3, "Employee3", 30, Gender.MALE, 35000.0));
     }
 
     @Test
-    void should_return_employees_when_get_all_given_employees() throws Exception{
-
+    void should_return_employees_when_get_all_given_employees() throws Exception {
         //Given
         List<Employee> expectedEmployees = employeeRepository.getAll();
 
@@ -64,8 +60,7 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    void should_return_employee_when_get_by_id_given_id() throws Exception{
-
+    void should_return_employee_when_get_by_id_given_id() throws Exception {
         //Given
         Employee expectedEmployee = employeeRepository.getEmployeeById(2);
         //When
@@ -78,11 +73,9 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    void should_return_male_when_get_male_given_employees() throws Exception{
-
+    void should_return_male_when_get_male_given_employees() throws Exception {
         //Given
         List<Employee> expectedEmployees = employeeRepository.getByGender(Gender.MALE);
-
 
         //When
         String employeesResponseString = client.perform(MockMvcRequestBuilders.get("/employees")
@@ -90,16 +83,12 @@ public class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
-
         //Then
         assertThat(employeesJacksonTester.parse(employeesResponseString)).usingRecursiveComparison().isEqualTo(expectedEmployees);
-
-
     }
 
     @Test
     void should_create_employee_when_create_given_employee() throws Exception {
-
         //Given
         String employee = """
                 {
@@ -109,6 +98,7 @@ public class EmployeeControllerTest {
                     "salary": 10000.0
                 }
                 """;
+
         // When
         final Employee expected_employee = new Employee(4, "E4", 12, Gender.MALE, 10000.0);
         String employeeJson = client.perform((MockMvcRequestBuilders.post("/employees"))
@@ -116,13 +106,13 @@ public class EmployeeControllerTest {
                         .content(employee))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andReturn().getResponse().getContentAsString();
+
         // Then
         assertThat(employeeJacksonTester.parse(employeeJson)).usingRecursiveComparison().isEqualTo(expected_employee);
     }
 
     @Test
     void should_update_employee_when_put_given_employee_id() throws Exception {
-
         //Given
         String employee = """
                 {
@@ -138,11 +128,8 @@ public class EmployeeControllerTest {
                         .content(employee))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn().getResponse().getContentAsString();
+
         // Then
         assertThat(employeeJacksonTester.parse(employeeJson)).usingRecursiveComparison().isEqualTo(expectedEmployee);
-
     }
-
-
-
 }
